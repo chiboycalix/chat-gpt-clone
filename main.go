@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -16,6 +17,9 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	message := flag.String("prompt", "How are you doing today", "message to chat gpt")
+	flag.Parse()
+
 	client := openai.NewClient(os.Getenv("API_KEY"))
 	resp, err := client.CreateChatCompletion(context.Background(), openai.ChatCompletionRequest{
 		Model:     openai.GPT3Dot5Turbo,
@@ -23,7 +27,7 @@ func main() {
 		Messages: []openai.ChatCompletionMessage{
 			{
 				Role:    openai.ChatMessageRoleUser,
-				Content: "Heloo",
+				Content: *message,
 			},
 		},
 	})
